@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    <string name="error_valid_name">Not Valid Name</string>
+    <string name="alert_valid_mobileNo">Please enter valid mobile No.</string>
+    <string name="alert_valid_email">Please enter valid Email</string>
+    <string name="alert_valid_address">Address is not Valid</string>
+    <string name="ADDRESS_VALIDATION">[a-zA-z0-9\\s\\-=.,]+</string>
+    <string name="MOBILE_VALIDATION">^[789][0-9]{9}</string>
+    <string name="NAME_VALIDATION">[a-zA-Z\\s]+</string>
+    <string name="enter_valid_mobile_number">Enter Valid Mobile Number</string>
+    <string name="email_id">Email ID</string>
+    <string name="enter_valid_email_id">Enter valid Email id</string>
+    <string name="address">Address</string>
+    <string name="address1">Address</string>
+    <string name="submit">Submit</string>
+    <string name="get_saved_details">GET SAVED DETAILS</string>
+    <string name="mobile_no">Mobile No</string>
+    <string name="enter_your_name">Enter your Name</string>
+    <string name="name">Name</string>
+</resources>
