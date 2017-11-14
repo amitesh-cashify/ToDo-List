@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -54,14 +55,17 @@ public class DisplayActivity extends AppCompatActivity implements View.OnClickLi
 //        ListView listView = (ListView) findViewById(R.id.listView);
 //        listView.setAdapter(myCustomAdapter);
 
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view1);
-
-       // GridView gridView = (GridView) findViewById(R.id.gridView);
-
-
         recyclerView.setLayoutManager(layoutManager);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
+
+
+        //GridLayoutManager layoutManager1 = new GridLayoutManager(this,4);
+//        recyclerView.setLayoutManager(layoutManager1);
+//        layoutManager1.setOrientation(GridLayoutManager.VERTICAL);
+
         RecyclerViewCustomAdapter recyclerViewAdapter = new RecyclerViewCustomAdapter(items);
         recyclerView.setAdapter(recyclerViewAdapter);
     }

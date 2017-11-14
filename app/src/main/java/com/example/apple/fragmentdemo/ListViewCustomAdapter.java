@@ -94,13 +94,26 @@ class LoadImageFromDatabase extends AsyncTask<String, Void, Bitmap> {
     LoadImageFromDatabase(ImageView mImageView) {
         this.mImageView = mImageView;
     }
+
+    @Override
+    protected void onCancelled() {
+        //super.onCancelled();
+        //isCancelled();
+    }
+
+    @Override
+    protected void onCancelled(Bitmap bitmap) {
+        super.onCancelled(bitmap);
+    }
+
     @Override
     protected Bitmap doInBackground(String[] params) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         this.path = params[0];
         Log.d("url", params[0]);
         Bitmap bitmap = null;
-
+        //cancel(true);
+        getStatus();
         try {
             URL url = new URL(params[0]);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

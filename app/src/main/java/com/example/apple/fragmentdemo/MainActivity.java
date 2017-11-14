@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bmOptions.inSampleSize = scaleFactor;
             bmOptions.inPurgeable = true;
 
-            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath,bmOptions);
             try {
                 OutputStream imageFile = new FileOutputStream(photoFile);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 5, imageFile);

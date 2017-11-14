@@ -1,15 +1,16 @@
 package com.example.apple.fragmentdemo;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by apple on 11/13/17.
@@ -19,6 +20,7 @@ import java.util.List;
 class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerViewCustomAdapter.MainViewHolder> {
 
     private List<FeedEntryData> list;
+    public List<String> imageUrl = new ArrayList<>();
 
     RecyclerViewCustomAdapter(List<FeedEntryData> items) {
         this.list = items;
@@ -31,13 +33,14 @@ class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerViewCustomA
             case 1:
                 return new FeedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_viewlayout, parent, false));
             case 2:
-                return new Feed2ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_view_layout, parent,false));
+                //return new Feed2ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_view_layout, parent,false));
         }
         return new FeedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_viewlayout, parent, false));
     }
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
+        addURL();
         holder.bind(list.get(position));
     }
 
@@ -83,7 +86,7 @@ class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerViewCustomA
             mTxtMobile.setText(feedEntryData.getMobile());
             mTxtAddress.setText(feedEntryData.getAddress());
 
-            new LoadImageFromDatabase(mImageView).execute("https://goo.gl/P1Jxrq");
+            new LoadImageFromDatabase(mImageView).execute(getURL());
         }
     }
 
@@ -108,7 +111,7 @@ class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerViewCustomA
         }
 
         void bind(FeedEntryData feedEntryData) {
-            mTxtId.setText(feedEntryData.getItemId()+"");
+            mTxtId.setText(feedEntryData.getItemId() + "");
             mTxtName.setText(feedEntryData.getName());
             mTxtEmail.setText(feedEntryData.getEmail());
             mTxtMobile.setText(feedEntryData.getMobile());
@@ -124,6 +127,23 @@ class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerViewCustomA
         }
 
         abstract void bind(FeedEntryData feedEntryData);
+    }
+
+    public String getURL() {
+        Random rn = new Random();
+        int max = 3;
+        int min = 0;
+
+        int randomNum = rn.nextInt(max - min + 1) + min;
+        Log.d("random Number", "" + randomNum);
+        return imageUrl.get(randomNum);
+    }
+
+    public void addURL() {
+        imageUrl.add("https://goo.gl/P1Jxrq");
+        imageUrl.add("https://goo.gl/QGCg8n");
+        imageUrl.add("https://goo.gl/QGCg8n");
+        imageUrl.add("https://goo.gl/E1iBwR");
     }
 }
 
