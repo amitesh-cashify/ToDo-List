@@ -7,18 +7,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
  * Created by apple on 11/13/17.
- * RecyclerViewAdapter
+ * RecyclerViewCustomAdapter
  */
 
-class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MainViewHolder> {
+class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerViewCustomAdapter.MainViewHolder> {
 
     private List<FeedEntryData> list;
 
-    RecyclerViewAdapter(List<FeedEntryData> items) {
+    RecyclerViewCustomAdapter(List<FeedEntryData> items) {
         this.list = items;
     }
 
@@ -29,13 +31,13 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MainV
             case 1:
                 return new FeedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_viewlayout, parent, false));
             case 2:
-                //return new Feed2ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_viewlayout, parent));
+                return new Feed2ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_view_layout, parent,false));
         }
         return new FeedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_viewlayout, parent, false));
     }
 
     @Override
-        public void onBindViewHolder(MainViewHolder holder, int position) {
+    public void onBindViewHolder(MainViewHolder holder, int position) {
         holder.bind(list.get(position));
     }
 
@@ -48,8 +50,9 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MainV
     public int getItemViewType(int position) {
         if (position % 2 == 0) {
             return 1;
+        } else {
+            return 2;
         }
-        return 1;
     }
 
     private class FeedViewHolder extends MainViewHolder {
@@ -79,7 +82,8 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MainV
             mTxtEmail.setText(feedEntryData.getEmail());
             mTxtMobile.setText(feedEntryData.getMobile());
             mTxtAddress.setText(feedEntryData.getAddress());
-            new LoadImageFromDatabase(mImageView).execute(feedEntryData.getImageName());
+
+            new LoadImageFromDatabase(mImageView).execute("https://goo.gl/P1Jxrq");
         }
     }
 
@@ -104,12 +108,12 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MainV
         }
 
         void bind(FeedEntryData feedEntryData) {
-            mTxtId.setText((int) feedEntryData.getItemId());
+            mTxtId.setText(feedEntryData.getItemId()+"");
             mTxtName.setText(feedEntryData.getName());
             mTxtEmail.setText(feedEntryData.getEmail());
             mTxtMobile.setText(feedEntryData.getMobile());
             mTxtAddress.setText(feedEntryData.getAddress());
-            new LoadImageFromDatabase(mImageView).execute(feedEntryData.getImageName());
+            new LoadImageFromDatabase(mImageView).execute("https://goo.gl/P1Jxrq");
         }
     }
 

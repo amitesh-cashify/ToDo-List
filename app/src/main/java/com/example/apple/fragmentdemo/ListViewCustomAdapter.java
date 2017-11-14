@@ -16,21 +16,26 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
 /**
  * Created by apple on 11/8/17.
- * FeedCustomAdapter
+ * ListViewCustomAdapter
  */
 
-class FeedCustomAdapter extends BaseAdapter {
+class ListViewCustomAdapter extends BaseAdapter {
 
     private Context context;
     private List<FeedEntryData> list;
 
-    FeedCustomAdapter(Context context, List<FeedEntryData> items) {
+    ListViewCustomAdapter(Context context, List<FeedEntryData> items) {
         this.context = context;
         this.list = items;
     }
@@ -47,6 +52,7 @@ class FeedCustomAdapter extends BaseAdapter {
 
         ImageView mImageView = (ImageView) convertView.findViewById(R.id.listViewImage);
         new LoadImageFromDatabase(mImageView).execute(feedEntryData.getImageName());
+
 
 //
 //        if (bitmap != null) {
@@ -83,19 +89,30 @@ class LoadImageFromDatabase extends AsyncTask<String, Void, Bitmap> {
 
     private ImageView mImageView;
     private String path;
+    private Bitmap bitmap;
 
     LoadImageFromDatabase(ImageView mImageView) {
         this.mImageView = mImageView;
     }
-
     @Override
-    protected Bitmap doInBackground(String... params) {
+    protected Bitmap doInBackground(String[] params) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         this.path = params[0];
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + path);
-        //Log.d("file  =", file + "");
-      //  Log.d("path=", this.path);
-        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+        Log.d("url", params[0]);
+        Bitmap bitmap = null;
+
+        try {
+            URL url = new URL(params[0]);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            bitmap = BitmapFactory.decodeStream(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+
         return bitmap;
     }
 

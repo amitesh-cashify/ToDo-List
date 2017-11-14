@@ -8,7 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.GridLayout;
+import android.widget.GridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,6 @@ public class DisplayActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.display_activity);
 
         findViewById(R.id.addNewDetailsButton).setOnClickListener(this);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view1);
-//        recyclerView.setLayoutManager(layoutManager);
-
 
         FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this);
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -53,16 +50,19 @@ public class DisplayActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initListView(List<FeedEntryData> items) {
-//        FeedCustomAdapter myCustomAdapter = new FeedCustomAdapter(this, items);
+//        ListViewCustomAdapter myCustomAdapter = new ListViewCustomAdapter(this, items);
 //        ListView listView = (ListView) findViewById(R.id.listView);
 //        listView.setAdapter(myCustomAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view1);
 
+       // GridView gridView = (GridView) findViewById(R.id.gridView);
+
+
         recyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(items);
+        RecyclerViewCustomAdapter recyclerViewAdapter = new RecyclerViewCustomAdapter(items);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 

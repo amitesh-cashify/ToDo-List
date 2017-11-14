@@ -193,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
