@@ -175,8 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
             int photoW = bmOptions.outWidth;
             int photoH = bmOptions.outHeight;
-            //Log.d(LOG, "photoW width=" + photoW + "");
-            //Log.d(LOG, "photoH height=" + photoH + "");
+
 
             int scaleFactor = Math.min(photoW / width, photoH / height);
             //Log.d(LOG, "scaleFactor =" + scaleFactor + "");
