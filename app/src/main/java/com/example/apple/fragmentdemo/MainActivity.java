@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_TAKE_PHOTO = 1;
     private EditText enteredName;
     private EditText enteredMobileNo;
     private EditText enteredEmailId;
@@ -36,9 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String mobileNo;
     private String email;
     private String address;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView mImageView;
-    private static final int REQUEST_TAKE_PHOTO = 1;
     private String mCurrentPhotoPath;
     private File photoFile;
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         enteredMobileNo = (EditText) findViewById(R.id.editText2);
         enteredEmailId = (EditText) findViewById(R.id.editText3);
         enteredAddress = (EditText) findViewById(R.id.editText4);
-
+        mImageView = (ImageView) findViewById(R.id.imageCaptureButton);
         findViewById(R.id.submitButton).setOnClickListener(this);
         findViewById(R.id.getSavedDetailsButton).setOnClickListener(this);
         findViewById(R.id.imageCaptureButton).setOnClickListener(this);
@@ -70,12 +70,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     isValidData();
                     if (mImageView != null) {
                         insertFeedData();
-                        // clearEnteredText();
                         Intent intent = new Intent(this, DisplayActivity.class);
                         startActivity(intent);
-                    } else {
-                        Toast.makeText(this, "Please capture image also", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    Toast.makeText(this, "Please capture image also", Toast.LENGTH_SHORT).show();
+
                 }
                 break;
 
@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(FeedEntry.COLUMN_NAME, name);
-        values.put(FeedEntry.COLUMN_IMAGE_NAME, photoFile + "");
-        values.put(FeedEntry.COLUMN_MOBILE_NO, mobileNo);
-        values.put(FeedEntry.COLUMN_EMAIL, email);
-        values.put(FeedEntry.COLUMN_ADDRESS, address);
-        long newRowId = db.insert(FeedEntry.TABLE_NAME, null, values);
+        values.put(FeedReaderDbHelper.COLUMN_NAME, name);
+        values.put(FeedReaderDbHelper.COLUMN_IMAGE_NAME, photoFile + "");
+        values.put(FeedReaderDbHelper.COLUMN_MOBILE_NO, mobileNo);
+        values.put(FeedReaderDbHelper.COLUMN_EMAIL, email);
+        values.put(FeedReaderDbHelper.COLUMN_ADDRESS, address);
+        long newRowId = db.insert(FeedReaderDbHelper.TABLE_NAME, null, values);
         db.close();
         String LOG = "MainActivity";
         Log.v(LOG, "isInserted = " + "" + newRowId);
@@ -150,8 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             if (photoFile != null) {
                 Uri photoUri = FileProvider.getUriForFile(this, "com.example.apple.fragmentdemo", photoFile);
-                //  Log.d(LOG, "photoUri = " + photoUri + "");
-                //  Log.d(LOG, "photoFile = " + photoFile + "");
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
@@ -162,50 +160,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
-            mImageView = (ImageView) findViewById(R.id.imageCaptureButton);
-
-            int width = mImageView.getWidth();
-            int height = mImageView.getHeight();
-            // Log.d(LOG, "String width=" + width + "");
-            // Log.d(LOG, "String height=" + height + "");
-
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-            int photoW = bmOptions.outWidth;
-            int photoH = bmOptions.outHeight;
-
-
-            int scaleFactor = Math.min(photoW / width, photoH / height);
-            //Log.d(LOG, "scaleFactor =" + scaleFactor + "");
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath,bmOptions);
-            try {
-                OutputStream imageFile = new FileOutputStream(photoFile);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 5, imageFile);
-
-                mImageView.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            setCapturedImage();
         }
+    }
+
+    private void setCapturedImage() {
+        int width = mImageView.getWidth();
+        int height = mImageView.getHeight();
+        Bitmap bitmap = getCompressedBitmap(width, height);
+        try {
+            OutputStream imageFile = new FileOutputStream(photoFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 5, imageFile);
+            mImageView.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap getCompressedBitmap(int width, int height) {
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+        int scaleFactor = Math.min(photoW / width, photoH / height);
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+        return BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
     }
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPG_" + timeStamp + "_";
-        File sd = Environment.getExternalStorageDirectory();
-        File file = getExternalFilesDir("Pictures");
-        //  Log.d(LOG, "file = " + file + "");
-        //  Log.d(LOG, "sd = " + sd + "");
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        //   Log.d(LOG, "StorageDir = " + storageDir + "");
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        // Log.d(LOG, "imagePole = " + image + "");
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }

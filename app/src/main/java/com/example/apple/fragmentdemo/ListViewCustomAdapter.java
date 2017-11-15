@@ -53,14 +53,6 @@ class ListViewCustomAdapter extends BaseAdapter {
         ImageView mImageView = (ImageView) convertView.findViewById(R.id.listViewImage);
         new LoadImageFromDatabase(mImageView).execute(feedEntryData.getImageName());
 
-
-//
-//        if (bitmap != null) {
-//            ((ImageView) convertView.findViewById(R.id.listViewImage)).setImageBitmap(bitmap);
-//        } else {
-//            ((ImageView) convertView.findViewById(R.id.listViewImage)).setImageResource(R.mipmap.ic_launcher);
-//        }
-
         ((TextView) convertView.findViewById(R.id.textViewName)).setText(feedEntryData.getName());
         ((TextView) convertView.findViewById(R.id.textViewMobileNo)).setText(feedEntryData.getMobile());
         ((TextView) convertView.findViewById(R.id.textViewEmail)).setText(feedEntryData.getEmail());
@@ -85,57 +77,4 @@ class ListViewCustomAdapter extends BaseAdapter {
 
 }
 
-class LoadImageFromDatabase extends AsyncTask<String, Void, Bitmap> {
 
-    private ImageView mImageView;
-    private String path;
-    private Bitmap bitmap;
-
-    LoadImageFromDatabase(ImageView mImageView) {
-        this.mImageView = mImageView;
-    }
-
-    @Override
-    protected void onCancelled() {
-        //super.onCancelled();
-        //isCancelled();
-    }
-
-    @Override
-    protected void onCancelled(Bitmap bitmap) {
-        super.onCancelled(bitmap);
-    }
-
-    @Override
-    protected Bitmap doInBackground(String[] params) {
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        this.path = params[0];
-        Log.d("url", params[0]);
-        Bitmap bitmap = null;
-        //cancel(true);
-        getStatus();
-        try {
-            URL url = new URL(params[0]);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            bitmap = BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-
-        return bitmap;
-    }
-
-    @Override
-    protected void onPostExecute(Bitmap bitmap) {
-        super.onPostExecute(bitmap);
-        if (bitmap != null && mImageView != null) {
-            mImageView.setImageBitmap(bitmap);
-        } else {
-            mImageView.setImageResource(R.mipmap.ic_launcher);
-        }
-    }
-}

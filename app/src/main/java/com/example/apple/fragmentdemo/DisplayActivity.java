@@ -25,29 +25,10 @@ public class DisplayActivity extends AppCompatActivity implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_activity);
-
         findViewById(R.id.addNewDetailsButton).setOnClickListener(this);
-
-        FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this);
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        Cursor cursor = db.query(FeedEntry.TABLE_NAME, null, null, null, null, null, null);
-
-        List<FeedEntryData> items = new ArrayList<>();
-
-        while (cursor.moveToNext()) {
-            long itemId = cursor.getLong(cursor.getColumnIndexOrThrow(FeedEntry._ID));
-            String imageName = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_IMAGE_NAME));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME));
-            String mobile = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_MOBILE_NO));
-            String email = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_EMAIL));
-            String address = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_ADDRESS));
-
-            items.add(new FeedEntryData(itemId, imageName, name, mobile, email, address));
-        }
-        cursor.close();
-        db.close();
-        initListView(items);
+        FeedReaderDbHelper l_dbHelper = new FeedReaderDbHelper(this);
+        List<FeedEntryData> l_items = l_dbHelper.getFeedList();
+        initListView(l_items);
     }
 
     private void initListView(List<FeedEntryData> items) {
@@ -57,9 +38,9 @@ public class DisplayActivity extends AppCompatActivity implements View.OnClickLi
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view1);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view0);
         recyclerView.setLayoutManager(layoutManager);
-        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
 
         //GridLayoutManager layoutManager1 = new GridLayoutManager(this,4);
@@ -68,6 +49,14 @@ public class DisplayActivity extends AppCompatActivity implements View.OnClickLi
 
         RecyclerViewCustomAdapter recyclerViewAdapter = new RecyclerViewCustomAdapter(items);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
+        RecyclerView recyclerView1 = (RecyclerView) findViewById(R.id.my_recycler_view1);
+        recyclerView1.setLayoutManager(layoutManager1);
+        layoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
+        RecyclerViewCustomAdapter recyclerViewCustomAdapter1 = new RecyclerViewCustomAdapter(items);
+        recyclerView1.setAdapter(recyclerViewCustomAdapter1);
     }
 
     @Override
@@ -76,6 +65,7 @@ public class DisplayActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.addNewDetailsButton:
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+
         }
     }
 }

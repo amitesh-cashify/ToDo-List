@@ -4,24 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view0"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <Button
         android:id="@+id/addNewDetailsButton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="ADD NEW DETAILS" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" />
-
-    <GridView
-        android:id="@+id/gridView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </GridView>
 
 </LinearLayout>
 

@@ -40,7 +40,7 @@ class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerViewCustomA
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        addURL();
+        addUrls();
         holder.bind(list.get(position));
     }
 
