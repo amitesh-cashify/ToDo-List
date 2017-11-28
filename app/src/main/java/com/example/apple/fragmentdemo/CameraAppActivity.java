@@ -53,7 +53,7 @@ public class CameraAppActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-            ImageView mImageView = (ImageView) findViewById(R.id.imageCaptureButton);
+            ImageView mImageView = (ImageView) findViewById(R.id.round_image);
 
             int width = mImageView.getWidth();
             int height = mImageView.getHeight();
