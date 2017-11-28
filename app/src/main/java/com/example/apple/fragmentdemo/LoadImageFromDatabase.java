@@ -20,11 +20,6 @@ class LoadImageFromDatabase extends AsyncTask<String, Void, Bitmap> {
     }
 
     @Override
-    protected void onCancelled() {
-
-    }
-
-    @Override
     protected Bitmap doInBackground(String[] params) {
 
         if (params == null || TextUtils.isEmpty(params[0])) {

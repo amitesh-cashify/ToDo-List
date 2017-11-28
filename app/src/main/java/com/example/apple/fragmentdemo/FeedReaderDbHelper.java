@@ -1,6 +1,5 @@
 package com.example.apple.fragmentdemo;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,17 +14,17 @@ import java.util.List;
  * FeedReaderDbHelper
  */
 
-public class FeedReaderDbHelper extends SQLiteOpenHelper {
+class FeedReaderDbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "FeedReader3.db";
-    public static final String TABLE_NAME = "entryTable";
-    public static final String ID = "id";
-    public static final String COLUMN_IMAGE_NAME = "imageName";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_MOBILE_NO = "mobileNo";
-    public static final String COLUMN_EMAIL = "email";
-    public static final String COLUMN_ADDRESS = "address";
+    static final String TABLE_NAME = "entryTable";
+    private static final String ID = "id";
+    static final String COLUMN_IMAGE_NAME = "imageName";
+    static final String COLUMN_NAME = "name";
+    static final String COLUMN_MOBILE_NO = "mobileNo";
+    static final String COLUMN_EMAIL = "email";
+    static final String COLUMN_ADDRESS = "address";
 
     private static final String SQL_CREATE_ENTRIES = " CREATE TABLE " + TABLE_NAME + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -35,7 +34,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             COLUMN_EMAIL + " TEXT, " +
             COLUMN_ADDRESS + " TEXT)";
 
-   public FeedReaderDbHelper(Context context) {
+    FeedReaderDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -56,14 +55,11 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<FeedEntryData> getFeedList() {
+    List<FeedEntryData> getFeedList() {
 
         List<FeedEntryData> items = new ArrayList<>();
         try {
-
-
             SQLiteDatabase db = getReadableDatabase();
-
             Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
 
             while (cursor.moveToNext()) {
