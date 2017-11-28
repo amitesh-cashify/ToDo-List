@@ -31,6 +31,7 @@ public class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerView
         addUrls();
     }
 
+
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
